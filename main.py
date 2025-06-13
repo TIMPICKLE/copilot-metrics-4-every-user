@@ -268,16 +268,14 @@ def main():
     logger.info(f"Data processing completed successfully.")
 
 
-if __name__ == "__main__":
-    while True:
-        try:
-            main()
-            logger.info(f"Sleeping for {Paras.execution_interval} minutes before next execution...")
-            for _ in range(Paras.execution_interval * 60 // 60):
-                logger.info("Heartbeat: still running...")
-                time.sleep(60)
-        except Exception as e:
-            logger.error(f"An error occurred: {traceback.format_exc(e)}")
-            time.sleep(5)
-        finally:
-            logger.info('-----------------Finished-----------------')
+if __name__ == '__main__':
+    try:
+        # Split Paras.organization_slugs and process each organization, remember to remove spaces after splitting
+        organization_slugs = Paras.organization_slugs.split(',')
+        for organization_slug in organization_slugs:
+            main(organization_slug.strip())
+        logger.info("All organizations processed successfully.")
+    except Exception as e:
+        logger.error(f"An error occurred: {traceback.format_exc()}")
+    finally:
+        logger.info('-----------------Finished-----------------')
